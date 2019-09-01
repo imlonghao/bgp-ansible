@@ -11,7 +11,7 @@ protocol bgp {{ neighbor }} {
     local as {{ local_as }};
     graceful restart on;
 {% if p.password is defined %}
-    password {{ p.password }};
+    password "{{ p.password }}";
 {% endif %}
 {% if p.type == 4 %}
     ipv4 {
