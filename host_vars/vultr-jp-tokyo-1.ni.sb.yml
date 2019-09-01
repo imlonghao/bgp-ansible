@@ -5,10 +5,10 @@ loopback:
 interfaces:
   - eth0
 statics:
-  4: 
+  "4":
     2.56.10.0/24:
       via: blackhole
-  6:
+  "6":
     2402:9e80:18::/48:
       via: blackhole
     2602:feda:1bf::/48:
