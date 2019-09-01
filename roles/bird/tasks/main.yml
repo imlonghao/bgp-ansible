@@ -4,7 +4,7 @@
     owner: root
 
 - name: test bird
-  shell: docker ps -q bird
+  shell: docker inspect bird
   register: if_bird_exist
   ignore_errors: true
 
@@ -14,8 +14,12 @@
     --net=host --cap-add=NET_ADMIN
     --name=bird
     imlonghao/bird
-  when: if_bird_exist.rc == 1
+  when: '"No such object" in if_bird_exist.stdout'
 
 - name: reload config
   shell: docker exec bird /birdc conf
-  when: if_bird_exist.rc == 0
+  when: (if_bird_exist.stdout|from_json)[0]["State"]["Running"]
+
+- name: start bird
+  shell: docker start bird
+  when: (if_bird_exist.stdout|from_json)[0]["State"]["Running"] == False
