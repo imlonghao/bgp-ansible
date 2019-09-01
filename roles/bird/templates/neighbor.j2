@@ -10,20 +10,26 @@ protocol bgp {{ neighbor }} {
 {% endif %}
     local as {{ local_as }};
     graceful restart on;
-{% if p.import_filter is not defined %}
-    import none;
-{% elif p.import_filter == 'all' %}
-    import all;
+{% if p.type == '4' %}
+    ipv4 {
 {% else %}
-    import filter {{ p.import_filter }};
+    ipv6 {
+{% endif %}
+{% if p.import_filter is not defined %}
+        import none;
+{% elif p.import_filter == 'all' %}
+        import all;
+{% else %}
+        import filter {{ p.import_filter }};
 {% endif %}
 {% if p.export_filter is not defined %}
-    export none;
+        export none;
 {% elif p.export_filter == 'all' %}
-    export all;
+        export all;
 {% else %}
-    export filter {{ p.export_filter }};
+        export filter {{ p.export_filter }};
 {% endif %}
+    }
 {% if p.multihop is defined and p.multihop %}
     multihop;
 {% endif %}
