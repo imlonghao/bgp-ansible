@@ -1,6 +1,5 @@
-- hosts: all
+- hosts: AS133846
   become: true
   become_user: root
   roles:
-    - { role: bird, tags: ['bgp', 'bird']}
-    - { role: rtrsub, tags: ['bgp', 'rtrsub']}
+    - bird

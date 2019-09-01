@@ -1,0 +1,27 @@
+protocol static {
+{% for static in statics['4'].keys() %}
+{% if statics['4'][static]['via'] == 'blackhole' %}
+    route {{ static }} blackhole;
+{% else %}
+    route {{ static }} via {{ statics['4'][static]['via'] }};
+{% endif %}
+{% endfor %}
+  ipv4 {
+    import all;
+    export all;
+  };
+}
+
+protocol static {
+{% for static in statics['6'].keys() %}
+{% if statics['6'][static]['via'] == 'blackhole' %}
+    route {{ static }} blackhole;
+{% else %}
+    route {{ static }} via {{ statics['6'][static]['via'] }};
+{% endif %}
+{% endfor %}
+  ipv6 {
+    import all;
+    export all;
+  };
+}

@@ -1,36 +1,21 @@
-- name: make blackhole drop dir
-  file:
-    name=/etc/bird/blackholes
-    state=directory
-    owner=root
-
-- name: make filter drop dir
-  file:
-    name=/etc/bird/filters
-    state=directory
-    owner=root
-
 - template:
     src: bird.j2
-    dest: /etc/bird/bird.conf
+    dest: /etc/bird.conf
     owner: root
-  vars:
-    afi: 4
-  notify: reload bird
 
-- template:
-    src: bird.j2
-    dest: /etc/bird/bird6.conf
-    owner: root
-  vars:
-    afi: 6
-  notify: reload bird6
+- name: test bird
+  shell: docker ps -q bird
+  register: if_bird_exist
+  ignore_errors: true
 
 - name: install bird
-  apt: name=bird state=latest
+  shell: docker run -d --restart=on-failure
+    -v /etc/bird.conf:/etc/bird.conf
+    --net=host --cap-add=NET_ADMIN
+    --name=bird
+    imlonghao/bird
+  when: if_bird_exist.rc == 1
 
-- name: start bird
-  service: name=bird state=started enabled=yes
-
-- name: start bird6
-  service: name=bird6 state=started enabled=yes
+- name: reload config
+  shell: docker exec bird /birdc conf
+  when: if_bird_exist.rc == 0

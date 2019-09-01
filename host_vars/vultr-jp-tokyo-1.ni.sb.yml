@@ -1,0 +1,31 @@
+router_id: 45.77.25.153
+loopback:
+  4: 45.77.25.153
+  6: 2001:19f0:7001:1ae0:5400:01ff:fee5:57be
+interfaces:
+  - eth0
+statics:
+  4: 
+    2.56.10.0/24:
+      via: blackhole
+  6:
+    2402:9e80:18::/48:
+      via: blackhole
+    2602:feda:1bf::/48:
+      via: blackhole
+bgp:
+  defaults:
+    local_as: 133846
+  peers:
+    vultr4:
+      type: 4
+      neighbor_ip: 169.254.169.254
+      local_ip: 45.77.25.153
+      remote_as: 64515
+      multihop: true
+    vultr6:
+      type: 6
+      neighbor_ip: 2001:19f0:ffff::1
+      local_ip: 2001:19f0:7001:1ae0:5400:01ff:fee5:57be
+      remote_as: 64515
+      multihop: true

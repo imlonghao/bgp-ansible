@@ -1,0 +1,17 @@
+protocol kernel {
+  scan time 10;
+  graceful restart on;
+  ipv4 {
+    import none;
+    export where kernel_export_filter_v4();
+  };
+}
+
+protocol kernel {
+  scan time 10;
+  graceful restart on;
+  ipv6 {
+    import none;
+    export where kernel_export_filter_v6();
+  };
+}
