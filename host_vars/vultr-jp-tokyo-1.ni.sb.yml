@@ -23,9 +23,11 @@ bgp:
       local_ip: 45.77.25.153
       remote_as: 64515
       multihop: true
+      password: dw92LKJS18
     vultr6:
       type: 6
       neighbor_ip: 2001:19f0:ffff::1
       local_ip: 2001:19f0:7001:1ae0:5400:01ff:fee5:57be
       remote_as: 64515
       multihop: true
+      password: dw92LKJS18
