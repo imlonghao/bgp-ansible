@@ -1,11 +1,11 @@
 function kernel_export_filter_v4() {
   if source = RTS_DEVICE then { reject; }
-  krt_prefsrc = {{ loopback['4'] }};
+  krt_prefsrc = {{ loopback.4 }};
   accept;
 }
 
 function kernel_export_filter_v6() {
   if source = RTS_DEVICE then { reject; }
-  krt_prefsrc = {{ loopback['6'] }};
+  krt_prefsrc = {{ loopback.6 }};
   accept;
 }

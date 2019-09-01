@@ -1,5 +1,6 @@
 - hosts: AS133846
   become: true
   become_user: root
+  remote_user: rancher
   roles:
     - bird
