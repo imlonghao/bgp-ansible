@@ -9,17 +9,21 @@
   ignore_errors: true
 
 - name: install bird
-  shell: docker run -d --restart=on-failure
+  shell: docker run -d --restart=always
     -v /etc/bird.conf:/etc/bird.conf
     --net=host --cap-add=NET_ADMIN
     --name=bird
     imlonghao/bird
-  when: '"No such object" in if_bird_exist.stdout'
+  when: '"No such object" in if_bird_exist.stderr'
 
 - name: reload config
   shell: docker exec bird /birdc conf
-  when: (if_bird_exist.stdout|from_json)[0]["State"]["Running"]
+  when:
+    - if_bird_exist.stdout|from_json|len != 0
+    - (if_bird_exist.stdout|from_json)[0]["State"]["Running"]
 
 - name: start bird
   shell: docker start bird
-  when: (if_bird_exist.stdout|from_json)[0]["State"]["Running"] == False
+  when:
+    - if_bird_exist.stdout|from_json|len != 0
+    - (if_bird_exist.stdout|from_json)[0]["State"]["Running"] == False
