@@ -1,42 +1,13 @@
 router id {{ router_id }};
 
-{% include "defines.j2" %}
+{% include "direct.j2" %}
 
-include "rpki-data.ipv{{ afi }}.conf";
+{% include "device.j2" %}
 
-{% include "filters-ipv" ~ afi ~ ".j2" %}
+{% include "filter.j2" %}
 
-{% include "generic.j2" %}
+{% include "kernel.j2" %}
 
-{% include "interfaces.j2" %}
+{% include "static.j2" %}
 
-{% include "statics.j2" %}
-
-{% include "tables.j2" %}
-
-protocol static blackhole1 {
-    include "blackholes/*.ipv{{ afi }}.conf";
-}
-
-protocol kernel {
-    persist;
-    scan time 20;
-    import none;
-    export filter {
-        if proto = "blackhole1" then reject;
-        krt_prefsrc = {{ loopback[afi] }};
-        accept;
-    };
-}
-
-protocol device {
-    scan time 10;
-}
-
-{% if afi == 4 %}
-{% include inventory_hostname + "/etc/bird/bird.conf" %}
-{% elif afi == 6 %}
-{% include inventory_hostname + "/etc/bird/bird6.conf" %}
-{% endif %}
-
-{% include "bgp_neighbors.j2" %}
+{% include "neighbor.j2" %}

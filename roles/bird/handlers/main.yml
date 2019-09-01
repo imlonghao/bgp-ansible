@@ -1,13 +1,2 @@
-- name: reload bird
-  command: "bird -p"
-  notify: really reload bird
-
-- name: really reload bird
-  service: name=bird state=reloaded enabled=yes
-
-- name: reload bird6
-  command: "bird6 -p"
-  notify: really reload bird6
-
-- name: really reload bird6
-  service: name=bird6 state=reloaded enabled=yes
+- name: reload config
+  shell: docker exec bird /birdc conf

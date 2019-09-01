@@ -1,6 +1,6 @@
-- hosts: all
+- hosts: AS133846
   become: true
   become_user: root
+  remote_user: rancher
   roles:
-    - { role: bird, tags: ['bgp', 'bird']}
-    - { role: rtrsub, tags: ['bgp', 'rtrsub']}
+    - bird

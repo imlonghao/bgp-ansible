@@ -1,0 +1,40 @@
+{% for neighbor in bgp['peers']|sort() %}
+{% set p = bgp['peers'][neighbor] %}
+protocol bgp {{ neighbor }} {
+    neighbor {{ p.neighbor_ip }} as {{ p.remote_as }};
+    source address {{ p.local_ip }};
+{% if p.local_as is not defined %}
+{% set local_as = bgp.defaults.local_as %}
+{% else %}
+{% set local_as = p.local_as %}
+{% endif %}
+    local as {{ local_as }};
+    graceful restart on;
+{% if p.password is defined %}
+    password "{{ p.password }}";
+{% endif %}
+{% if p.type == 4 %}
+    ipv4 {
+{% else %}
+    ipv6 {
+{% endif %}
+{% if p.import_filter is not defined %}
+        import none;
+{% elif p.import_filter == 'all' %}
+        import all;
+{% else %}
+        import filter {{ p.import_filter }};
+{% endif %}
+{% if p.export_filter is not defined %}
+        export none;
+{% elif p.export_filter == 'all' %}
+        export all;
+{% else %}
+        export filter {{ p.export_filter }};
+{% endif %}
+    };
+{% if p.multihop is defined and p.multihop %}
+    multihop;
+{% endif %}
+}
+{% endfor %}
